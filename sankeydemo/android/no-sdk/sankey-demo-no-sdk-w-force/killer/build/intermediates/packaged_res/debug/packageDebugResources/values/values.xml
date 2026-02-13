@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_service_description">This service allows the app to swipe away other apps from the recent apps screen to simulate user-requested force quits.</string>
+    <string name="app_name">App Killer</string>
+</resources>

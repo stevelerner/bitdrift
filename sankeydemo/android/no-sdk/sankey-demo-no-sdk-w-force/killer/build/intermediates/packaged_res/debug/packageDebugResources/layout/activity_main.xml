@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="App Killer"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Service Status: Unknown"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:background="#E0E0E0"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="How it works:\n\n1. Enable the accessibility service below\n2. Run the Sankey Demo app simulation\n3. When a force quit is triggered, this app will open the recent apps screen and swipe up to dismiss the demo app\n4. This produces a USER_REQUESTED app exit reason"
+        android:textSize="14sp"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/enable_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enable Service"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/test_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test Kill (Demo App)"
+        android:enabled="false" />
+
+</LinearLayout>

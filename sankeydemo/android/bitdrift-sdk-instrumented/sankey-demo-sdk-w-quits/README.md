@@ -97,6 +97,8 @@ AppRestartManager.isEnabled = true
 
 ### Log Events
 
+**Note:** Each simulated journey generates a new session ID via `Logger.startNewSession()`, allowing you to track individual user journeys separately in the bitdrift dashboard.
+
 | Event | Description |
 |-------|-------------|
 | `force_quit_triggered` | Logged when a random force quit occurs (includes step name and exit_type) |

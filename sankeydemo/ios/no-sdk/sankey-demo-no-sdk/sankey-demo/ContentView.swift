@@ -4,10 +4,7 @@
 //
 //  A demo app to illustrate user journey flows for Sankey chart visualization
 //
-//  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-//  BITDRIFT USER JOURNEY SCREEN NAMES (in order)
-//  Use these exact names when configuring User Journeys in Bitdrift dashboard
-//  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  Screen flow:
 //
 //  Step 1: Welcome
 //  Step 2: Browse, Search
@@ -18,28 +15,21 @@
 //  Step 6: PaymentCard, PaymentApplePay, PaymentPayPal
 //  Step 7: Confirmation
 //
-//  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-//
 
 import SwiftUI
 import Combine
-import Capture
 
 // MARK: - Screen Logger
-/// Centralized logging for screen views and user actions using Bitdrift SDK.
-/// Uses Logger.logScreenView() for User Journey tracking in Sankey charts.
+/// Centralized logging for screen views and user actions.
 final class ScreenLogger {
     static let shared = ScreenLogger()
 
     private init() {}
 
-    // MARK: - Screen View (for User Journey / Sankey charts)
+    // MARK: - Screen View
 
-    /// Logs a screen view event using Bitdrift's dedicated screen view API.
-    /// This is the primary event for Sankey chart / User Journey generation.
+    /// Logs a screen view event.
     func logScreenView(_ screenName: String) {
-        // Bitdrift SDK: Log screen view for user journey / Sankey chart tracking
-        Logger.logScreenView(screenName: screenName)
         print("_screen_name: \(screenName)")
     }
 
@@ -47,22 +37,16 @@ final class ScreenLogger {
 
     /// Logs an info-level message with optional fields.
     func logInfo(_ message: String, fields: [String: String] = [:]) {
-        // Bitdrift SDK: Log info-level message with custom fields
-        Logger.logInfo(message, fields: fields)
         printLog(level: "INFO", message: message, fields: fields)
     }
 
     /// Logs a debug-level message with optional fields.
     func logDebug(_ message: String, fields: [String: String] = [:]) {
-        // Bitdrift SDK: Log debug-level message with custom fields
-        Logger.logDebug(message, fields: fields)
         printLog(level: "DEBUG", message: message, fields: fields)
     }
 
     /// Logs a warning-level message with optional fields.
     func logWarning(_ message: String, fields: [String: String] = [:]) {
-        // Bitdrift SDK: Log warning-level message with custom fields
-        Logger.logWarning(message, fields: fields)
         printLog(level: "WARNING", message: message, fields: fields)
     }
 
@@ -411,7 +395,6 @@ struct ScreenContainer<Content: View>: View {
         .navigationTitle("Step \(step)")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            // bitdrift user journey logging
             ScreenLogger.shared.logScreenView(screenName)
         }
     }
@@ -897,7 +880,6 @@ struct ConfirmationView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            // bitdrift user journey logging
             ScreenLogger.shared.logScreenView("Confirmation")
         }
     }

@@ -127,6 +127,20 @@ The app tracks navigation through an e-commerce flow. Each screen logs via `logS
 | 6 | `PaymentPayPal` | PayPal payment |
 | 7 | `Confirmation` | Order confirmation |
 
+### Simulation Mode
+
+The app includes a simulation mode for generating test data. **Each simulated journey generates a new session ID** via `Logger.startNewSession()`, allowing you to track individual user journeys separately in the bitdrift dashboard.
+
+Simulation events are logged via `ScreenLogger.logInfo()` which writes to Android's `Log.d` only (not sent to bitdrift):
+
+| Event | Fields | Description |
+|-------|--------|-------------|
+| `simulation_start` | `total_runs` | Fixed simulation begins |
+| `simulation_end` | `total_runs` | Simulation completes |
+| `simulation_cancelled` | `completed_runs`, `total_runs` | User cancels |
+| `infinite_simulation_start` | - | Infinite mode begins |
+| `infinite_simulation_end` | `total_runs` | Infinite mode ends |
+
 ## Project Structure
 
 ```

@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  support-sankey-demo
+//  sankey-demo
 //
 //  A demo app to illustrate user journey flows for Sankey chart visualization
 //
@@ -184,6 +184,9 @@ class SimulationManager: ObservableObject {
 
     /// Executes a single random journey through the app
     private func runSingleJourney(path: Binding<NavigationPath>) async {
+        // Generate new session ID for this journey
+        Logger.startNewSession()
+        
         // Reset to start
         path.wrappedValue = NavigationPath()
         try? await Task.sleep(nanoseconds: UInt64(stepDelay * 1_000_000_000))
@@ -465,10 +468,6 @@ struct SecondaryButton: View {
 struct WelcomeView: View {
     @Binding var path: NavigationPath
     @ObservedObject var simulationManager: SimulationManager
-    @State private var supportCode: String?
-    @State private var showSupportCode = false
-    @State private var supportCodeError: String?
-    @State private var supportLogEnabled = false
 
     var body: some View {
         ScreenContainer(
@@ -502,7 +501,7 @@ struct WelcomeView: View {
                     .padding()
             } else {
                 // Simulation buttons
-                HStack(spacing: 8) {
+                HStack(spacing: 12) {
                     SimButton(title: "Sim 10", color: .orange) {
                         Task {
                             await simulationManager.simulate(runs: 10, path: $path)
@@ -513,65 +512,21 @@ struct WelcomeView: View {
                             await simulationManager.simulate(runs: 100, path: $path)
                         }
                     }
-                    SimButton(title: "∞", color: .purple) {
-                        Task {
-                            await simulationManager.infiniteSimulate(path: $path)
-                        }
-                    }
                 }
 
-                // Support buttons
-                HStack(spacing: 8) {
-                    Button(action: {
-                        Logger.createTemporaryDeviceCode { result in
-                            DispatchQueue.main.async {
-                                switch result {
-                                case .success(let code):
-                                    supportCode = code
-                                    supportCodeError = nil
-                                case .failure(let error):
-                                    supportCode = nil
-                                    supportCodeError = error.localizedDescription
-                                }
-                                showSupportCode = true
-                            }
-                        }
-                    }) {
-                        Text("Support Code")
-                            .font(.caption.bold())
-                            .foregroundColor(.green)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
-                            .background(Color.green.opacity(0.15))
-                            .cornerRadius(8)
+                // Infinite simulation button
+                Button(action: {
+                    Task {
+                        await simulationManager.infiniteSimulate(path: $path)
                     }
-                    .alert(supportCode != nil ? "Support Code" : "Error", isPresented: $showSupportCode) {
-                        if let code = supportCode {
-                            Button("Copy", action: {
-                                UIPasteboard.general.string = code
-                            })
-                        }
-                        Button("OK", role: .cancel) {}
-                    } message: {
-                        if let code = supportCode {
-                            Text("\(code)\n\nShare this code with support to debug your session.")
-                        } else if let error = supportCodeError {
-                            Text("Failed to generate code: \(error)")
-                        }
-                    }
-
-                    Button(action: {
-                        supportLogEnabled.toggle()
-                        Logger.addField(withKey: "supportlog", value: supportLogEnabled ? "true" : "false")
-                    }) {
-                        Text("Support Log")
-                            .font(.caption.bold())
-                            .foregroundColor(supportLogEnabled ? .white : .teal)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
-                            .background(supportLogEnabled ? Color.teal : Color.teal.opacity(0.15))
-                            .cornerRadius(8)
-                    }
+                }) {
+                    Text("∞ Infinite Sim")
+                        .font(.caption.bold())
+                        .foregroundColor(.purple)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color.purple.opacity(0.15))
+                        .cornerRadius(8)
                 }
                 .padding(.top, 4)
             }
@@ -588,12 +543,12 @@ struct SimButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(.subheadline.bold())
+                .font(.headline)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
+                .padding()
                 .background(color)
-                .cornerRadius(10)
+                .cornerRadius(12)
         }
     }
 }

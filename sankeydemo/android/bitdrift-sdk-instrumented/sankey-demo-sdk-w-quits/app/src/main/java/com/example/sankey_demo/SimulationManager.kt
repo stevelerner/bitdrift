@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import io.bitdrift.capture.Capture.Logger as BitdriftLogger
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -131,6 +132,9 @@ class SimulationManager : ViewModel() {
      * May randomly force quit at any step based on AppRestartManager probability.
      */
     private suspend fun runSingleJourney(navController: NavController) {
+        // Generate new session ID for this journey
+        BitdriftLogger.startNewSession()
+        
         // Reset to start
         navController.navigate(Screen.Welcome.route) {
             popUpTo(Screen.Welcome.route) { inclusive = true }

@@ -106,7 +106,7 @@ The app tracks navigation through an e-commerce flow. Each screen logs via `logS
 
 #### Simulation Events
 
-The app includes a simulation mode for generating test data:
+The app includes a simulation mode for generating test data. **Each simulated journey generates a new session ID** via `Logger.startNewSession()`, allowing you to track individual user journeys separately in the bitdrift dashboard.
 
 | Event | Fields | Description |
 |-------|--------|-------------|

@@ -153,7 +153,9 @@ The app tracks navigation through an e-commerce flow. Each screen logs via `logS
 
 #### Simulation Events (local log only)
 
-The app includes a simulation mode for generating test data. These events are logged via `ScreenLogger.logInfo` which writes to Android's `Log.d` only (not sent to bitdrift):
+The app includes a simulation mode for generating test data. **Each simulated journey generates a new session ID** via `Logger.startNewSession()`, allowing you to track individual user journeys separately in the bitdrift dashboard.
+
+These events are logged via `ScreenLogger.logInfo` which writes to Android's `Log.d` only (not sent to bitdrift):
 
 | Event | Fields | Description |
 |-------|--------|-------------|

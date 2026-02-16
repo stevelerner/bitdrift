@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import io.bitdrift.capture.Capture.Logger as BitdriftLogger
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

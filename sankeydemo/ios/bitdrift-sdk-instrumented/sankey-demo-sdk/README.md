@@ -45,29 +45,84 @@ The Capture SDK provides these logging methods on the `Logger` class:
 | `Logger.logInfo(_:fields:)` | Info-level log messages |
 | `Logger.logDebug(_:fields:)` | Debug-level log messages |
 | `Logger.logWarning(_:fields:)` | Warning-level log messages |
+| `Logger.startNewSession()` | Generates a new session ID for tracking separate user sessions |
 
-### App Wrapper Class
+### Logging Implementation
 
-This demo app uses a custom `ScreenLogger` singleton wrapper (defined in `ContentView.swift`) that calls the bitdrift SDK methods internally:
+#### Dual Logging Approach
+
+This app implements a **dual logging strategy**:
+
+1. **bitdrift Cloud Logging** - All events are sent to the bitdrift dashboard for analysis, visualization, and alerting
+2. **Console Logging** - Events are also printed to Xcode console for local debugging
+
+#### ScreenLogger Wrapper
+
+The app uses a custom `ScreenLogger` singleton wrapper (defined in `ContentView.swift`) that encapsulates both logging destinations:
 
 ```swift
-class ScreenLogger {
+final class ScreenLogger {
     static let shared = ScreenLogger()
-
+    
+    private init() {}
+    
+    // Logs screen views for user journey tracking
     func logScreenView(_ screenName: String) {
-        Logger.logScreenView(screenName: screenName)  // bitdrift SDK
-        print("_screen_name: \(screenName)")          // also prints to console
+        // → Sent to bitdrift dashboard
+        Logger.logScreenView(screenName: screenName)
+        
+        // → Printed to Xcode console
+        print("_screen_name: \(screenName)")
     }
-
-    func logInfo(message: String, fields: [String: String]) {
-        Logger.logInfo(message, fields: fields)       // bitdrift SDK
-        print("INFO: \(message) - \(fields)")
+    
+    // Logs info-level events with optional structured fields
+    func logInfo(_ message: String, fields: [String: String] = [:]) {
+        // → Sent to bitdrift dashboard with structured fields
+        Logger.logInfo(message, fields: fields)
+        
+        // → Printed to Xcode console
+        printLog(level: "INFO", message: message, fields: fields)
     }
-    // ... similar for logDebug, logWarning
+    
+    // Similar implementations for logDebug() and logWarning()
+    // ...
+    
+    private func printLog(level: String, message: String, fields: [String: String]) {
+        var output = "[\(level)] \(message)"
+        if !fields.isEmpty {
+            let fieldStrings = fields.map { "\($0.key)=\($0.value)" }.sorted()
+            output += " | " + fieldStrings.joined(separator: " | ")
+        }
+        print(output)
+    }
 }
 ```
 
-This wrapper provides a centralized place to add console output alongside bitdrift logging.
+**Benefits of this approach:**
+- All events are captured in bitdrift for production analysis
+- Local console output available during development
+- Single wrapper maintains consistency across the app
+- Easy to add additional logging destinations
+
+#### Automatic Screen View Logging
+
+Every screen in the app automatically logs its view using the `ScreenContainer` composable's `onAppear` modifier:
+
+```swift
+struct ScreenContainer<Content: View>: View {
+    let screenName: String
+    // ... other properties
+    
+    var body: some View {
+        VStack {
+            // ... UI content
+        }
+        .onAppear {
+            ScreenLogger.shared.logScreenView(screenName)
+        }
+    }
+}
+```
 
 ### Logged Events
 
@@ -119,6 +174,14 @@ The app includes a simulation mode for generating test data. **Each simulated jo
 ### Dependencies
 
 The project uses the [capture-ios](https://github.com/bitdriftlabs/capture-ios) SDK via Swift Package Manager.
+
+**SDK Version:** 0.22.7
+
+**Frameworks:**
+- **Capture** - Main bitdrift SDK for mobile observability
+- CocoaLumberjack 3.9.0 - Logging framework dependency
+- swift-log 1.9.1 - Swift logging API dependency
+- SwiftyBeaver 2.1.1 - Logging platform dependency
 
 ### Usage Example
 

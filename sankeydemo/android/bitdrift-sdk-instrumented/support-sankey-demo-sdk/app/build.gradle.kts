@@ -4,7 +4,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("plugin.compose")
-    id("io.bitdrift.capture-plugin") version "0.22.5"
+    id("io.bitdrift.capture-plugin") version "0.22.7"
 }
 
 android {

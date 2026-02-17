@@ -14,6 +14,50 @@ A demo Android application showcasing [bitdrift's](https://bitdrift.io/) mobile 
 
 ![User Journey Sankey Diagram](images/userjourney-android.png)
 
+## What This Demo Does
+
+Each app simulates an e-commerce journey with branching paths (browse, search, product detail, cart, checkout, payment, confirmation). Every screen logs a screen view event so the bitdrift dashboard can visualize the full journey as a Sankey diagram.
+
+## Project Layout
+
+```
+android/
+    bitdrift-sdk-instrumented/
+        sankey-demo-sdk/
+        support-sankey-demo-sdk/
+    no-sdk/
+        sankey-demo-no-sdk/
+        sankey-demo-no-sdk-w-force/
+        sankey-demo-no-sdk-w-quits/
+ios/
+    bitdrift-sdk-instrumented/
+        sankey-demo-sdk/
+        support-sankey-demo-sdk/
+    no-sdk/
+        sankey-demo-no-sdk/
+        support-sankey-demo-no-sdk/
+react-native/
+    sankey-demo-no-sdk/
+```
+
+## App Variants
+
+- SDK instrumented: ready-to-run examples integrated with the bitdrift SDK.
+- No-SDK: baseline projects without bitdrift integration for comparison or custom wiring.
+- Support apps: auxiliary builds used in the demo flow and testing.
+
+## Where To Start
+
+- Android (SDK): ./
+- iOS (SDK): ../../../ios/bitdrift-sdk-instrumented/sankey-demo-sdk/
+- React Native (No-SDK): ../../../react-native/sankey-demo-no-sdk/
+
+Each platform folder contains its own README with setup and run instructions.
+
+## Concept Summary
+
+The demo logs screen views for a fixed set of screens. These events are grouped into user sessions and rendered in the bitdrift dashboard as a Sankey diagram that highlights the most common paths and drop-offs.
+
 ## Bitdrift SDK Integration
 
 Follow the [SDK Quickstart](https://docs.bitdrift.io/sdk/quickstart) for complete setup instructions.
